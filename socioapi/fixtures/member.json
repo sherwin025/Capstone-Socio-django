@@ -1,0 +1,13 @@
+[
+    {
+        "model": "socioapi.member",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "details": "Recently moved to nashville looking to expand my network and community",
+            "parent": true,
+            "zipcode": 37211,
+            "image": "www.google.com"
+        }
+    }
+]

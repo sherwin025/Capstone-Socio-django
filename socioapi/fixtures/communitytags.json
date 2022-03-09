@@ -1,0 +1,26 @@
+[
+    {
+        "model": "socioapi.communitytag",
+        "pk": 1,
+        "fields": {
+            "community": 1,
+            "tag": 1
+        }
+    },
+    {
+        "model": "socioapi.communitytag",
+        "pk": 2,
+        "fields": {
+            "tag": 2,
+            "community": 1
+        }
+    },
+    {
+        "model": "socioapi.communitytag",
+        "pk": 3,
+        "fields": {
+            "tag": 3,
+            "community": 1
+        }
+    }
+]

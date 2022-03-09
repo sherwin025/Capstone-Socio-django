@@ -1,0 +1,15 @@
+[
+    {
+        "model": "socioapi.businessevent",
+        "pk": 1,
+        "fields": {
+            "business": 1,
+            "title": "We are doing a turkey giveaway!",
+            "details":  "at 46 washington st dorchester ma 02121 we are doing a turkey giveaway",
+            "address": "46 washington st dorchester ma 02121",
+            "date": "2021-06-12",
+            "time": "18:00",
+            "approved": true
+        }
+    }
+]

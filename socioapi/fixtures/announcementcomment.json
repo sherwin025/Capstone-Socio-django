@@ -1,0 +1,11 @@
+[
+    {
+        "model": "socioapi.announcementcomment",
+        "pk": 1,
+        "fields": {
+            "member": 1,
+            "announcement": "1",
+            "details": "empty comment bro"
+        }
+    }
+]

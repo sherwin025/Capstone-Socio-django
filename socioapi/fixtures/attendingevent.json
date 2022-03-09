@@ -1,0 +1,10 @@
+[
+    {
+        "model": "socioapi.attendevent",
+        "pk": 1,
+        "fields": {
+            "event": 1,
+            "member": 1
+        }
+    }
+]

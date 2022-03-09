@@ -1,0 +1,13 @@
+[
+    {
+        "model": "socioapi.business",
+        "pk": 1,
+        "fields": {
+            "member": 1,
+            "name": "Brothers super market",
+            "address": "46 washington st dorchester ma 02121",
+            "email": "brothers@brothersgroup.com",
+            "phone": 6172952352
+        }
+    }
+]

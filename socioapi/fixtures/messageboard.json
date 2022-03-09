@@ -1,0 +1,11 @@
+[
+    {
+        "model": "socioapi.messageboard",
+        "pk": 1,
+        "fields": {
+            "member": 1,
+            "community": 1,
+            "content": "empty messsage board bro"
+        }
+    }
+]

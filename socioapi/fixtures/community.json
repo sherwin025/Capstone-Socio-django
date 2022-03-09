@@ -1,0 +1,15 @@
+[
+    {
+        "model": "socioapi.community",
+        "pk": 1,
+        "fields": {
+            "name": "brentwood ymca baseball 3-5",
+            "about": "team communications hub",
+            "public": false,
+            "visible": false,
+            "createdby": 1,
+            "parentportal": true,
+            "rules": "1. only for coach to parents communcations, 2. keep it light"
+        }
+    }
+]

@@ -1,0 +1,19 @@
+[
+    {
+        "model": "socioapi.communityevent",
+        "pk": 1,
+        "fields": {
+            "name": "Final Game Roundup",
+            "details":  "get kids together for final game bbq roundup at the fields",
+            "address": "46 washington st dorchester ma 02121",
+            "date": "2021-06-12",
+            "time": "18:00",
+            "approved": true,
+            "public": false, 
+            "community": 1,
+            "member": 1,
+            "isactivity": false,
+            "zipcode": 37211
+        }
+    }
+]

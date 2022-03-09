@@ -1,0 +1,16 @@
+[
+    {
+        "model": "socioapi.announcement",
+        "pk": 1,
+        "fields": {
+            "title": "game march 15th, 2022",
+            "details": "Normal fields where we practice at 10am",
+            "approved": true,
+            "member": 1,
+            "community": 1,
+            "public": false,
+            "zipcode": 37211,
+            "comments": true
+        }
+    }
+]

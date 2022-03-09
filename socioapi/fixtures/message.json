@@ -1,0 +1,12 @@
+[
+    {
+        "model": "socioapi.directmessage",
+        "pk": 1,
+        "fields": {
+            "sender": 1,
+            "recipient": 1,
+            "title": "message to myself",
+            "content": "empty message bro"
+        }
+    }
+]

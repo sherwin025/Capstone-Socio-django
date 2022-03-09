@@ -1,0 +1,23 @@
+[
+    {
+        "model": "socioapi.tag",
+        "pk": 1,
+        "fields": {
+            "label": "kids"
+        }
+    },
+    {
+        "model": "socioapi.tag",
+        "pk": 2,
+        "fields": {
+            "label": "sports"
+        }
+    },
+    {
+        "model": "socioapi.tag",
+        "pk": 3,
+        "fields": {
+            "label": "nashville"
+        }
+    }
+]

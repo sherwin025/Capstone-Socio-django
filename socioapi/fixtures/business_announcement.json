@@ -1,0 +1,11 @@
+[
+    {
+        "model": "socioapi.businessannouncement",
+        "pk": 1,
+        "fields": {
+            "business": 1,
+            "details": "We are doing a turkey giveaway! for our grandopening",
+            "approved": true
+        }
+    }
+]
