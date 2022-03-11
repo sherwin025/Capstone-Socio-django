@@ -3,11 +3,32 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import CommunityEvent
+from rest_framework.decorators import action
+from django.db.models import Count
+from socioapi.models.member import Member
 
 class CommunityEventView(ViewSet):
+    
+    @action(methods=["post"], detail=True)
+    def attend(self,request,pk):
+        member = Member.objects.get(user=request.auth.user)
+        event = CommunityEvent.objects.get(pk=pk)
+        event.attendees.add(member)
+        return Response({'message': 'Your attending'}, status=status.HTTP_201_CREATED)
+        
+        
+    @action(methods=["delete"], detail=True)
+    def leave(self,request,pk):
+        member = Member.objects.get(user=request.auth.user)
+        event = CommunityEvent.objects.get(pk=pk)
+        event.attendees.remove(member)
+        return Response({'message': 'Not Attending'}, status=status.HTTP_204_NO_CONTENT)
+            
     def retrieve(self,request,pk):
         try:
-            event = CommunityEvent.objects.get(pk=pk)
+            member = Member.objects.get(user=request.auth.user)
+            event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent')).get(pk=pk)
+            event.joined = member in event.attendees.all()
             serializer = CommunitySerializer(event)
             return Response(serializer.data)
         except CommunityEvent.DoesNotExist as ex:
@@ -15,8 +36,11 @@ class CommunityEventView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
-        event = CommunityEvent.objects.all()
+        member = Member.objects.get(user=request.auth.user)
+        event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent'))
         
+        for events in event:
+            events.joined = member in events.attendees.all()
         if filter is not None:
             event = event.filter(name__contains=filter)
         serializer = CommunitySerializer(event, many=True)
@@ -43,7 +67,7 @@ class CommunityEventView(ViewSet):
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityEvent
-        fields = "__all__"
+        fields = ('id', 'name', 'date', 'address', 'approved', 'public', 'details', 'isactivity', 'zipcode', 'image', 'timestamp', 'community', 'member', 'time', "joined", 'attending_count')
         depth = 1
         
 class CreateCommunitySerializer(serializers.ModelSerializer):

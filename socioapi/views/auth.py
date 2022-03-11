@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -18,6 +19,8 @@ def login_user(request):
     member = Member.objects.get(user=authenticated_user)
     
     if authenticated_user is not None:
+        authenticated_user.last_login = timezone.now
+        authenticated_user.save()
         token = Token.objects.get(user=authenticated_user)
         data = {
             'member': member.id,
@@ -39,7 +42,8 @@ def register_user(request):
         first_name=request.data['first_name'],
         last_name=request.data['last_name'],
         email=request.data['email'],
-        is_staff=request.data['is_staff']
+        is_staff=request.data['is_staff'],
+        last_login=timezone.now
     )
     
     member = Member.objects.create(
