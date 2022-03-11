@@ -1,14 +1,43 @@
+
 from sqlite3 import Timestamp
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import Community
+from socioapi.models.announcement import Announcement
+from socioapi.models.announcementnotification import AnnouncementNotification
 from socioapi.models.communitymember import CommunityMember
+from socioapi.models.event import CommunityEvent
+from socioapi.models.eventnotification import EventNotification
 from socioapi.models.member import Member
 from django.db.models import Count
+from rest_framework.decorators import action
 
 class CommunityView(ViewSet):
+    # @action(methods=["get"], detail=None)
+    # def notifications(self,request,pk):
+    #     member = Member.objects.get(user=request.auth.user)
+    #     commmember = CommunityMember.objects.all(member=member)
+    #     last_login = request.query_params.get('lastlogin', None)
+    #     array = []
+        
+    #     if last_login is not None:
+    #         for acommunity in commmember:
+    #             events = CommunityEvent.objects.all(community=acommunity.community)
+    #             announcements = Announcement.objects.all(community=acommunity.community)
+                
+    #             for event in events: 
+    #                 enotify = EventNotification.objects.all(event=event, timestamp__gte=last_login, read="False")
+    #                 array.append(enotify)
+                    
+    #             for announcement in announcements:
+    #                 anotify = AnnouncementNotification.objects.all(announcement=announcement, timestamp__gte=last_login, read='False')
+    #                 array.append(anotify)
+                
+    #     return Response({array})
+    
+    
     def retrieve(self,request,pk):
         member = Member.objects.get(user=request.auth.user)
         try:

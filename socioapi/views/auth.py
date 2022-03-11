@@ -7,6 +7,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from socioapi.models import Member
+from socioapi.models.announcementnotification import AnnouncementNotification
+from socioapi.models.eventnotification import EventNotification
 
 
 @api_view(['POST'])
@@ -17,16 +19,26 @@ def login_user(request):
 
     authenticated_user = authenticate(username=username, password=password)
     member = Member.objects.get(user=authenticated_user)
+    # notification = False
     
     if authenticated_user is not None:
-        authenticated_user.last_login = timezone.now
-        authenticated_user.save()
+        # need to also send community id for individual notifications added last login to data instead to do it front end? 
+        # notify = EventNotification.objects.all(community_member=member, timestamp__gte= authenticated_user.last_login)
+        # anotify = AnnouncementNotification.objects.all(community_member=member, timestamp__gte= authenticated_user.last_login)
+        
+        # if notify is not None  or anotify is not None:
+        #     notification = True
+            
         token = Token.objects.get(user=authenticated_user)
         data = {
             'member': member.id,
             'admin': authenticated_user.is_staff,
-            'token': token.key
+            'token': token.key,
+            'last_login': authenticated_user.last_login
         }
+        
+        authenticated_user.last_login = timezone.now
+        authenticated_user.save()
         return Response(data)
     else:
         data = {'valid': False}

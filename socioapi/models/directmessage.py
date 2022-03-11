@@ -8,3 +8,4 @@ class DirectMessage(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=150)
     image = models.ImageField(blank=True)
+    read = models.BooleanField()
