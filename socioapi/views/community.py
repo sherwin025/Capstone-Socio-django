@@ -5,37 +5,13 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import Community
-from socioapi.models.announcement import Announcement
-from socioapi.models.announcementnotification import AnnouncementNotification
 from socioapi.models.communitymember import CommunityMember
-from socioapi.models.event import CommunityEvent
-from socioapi.models.eventnotification import EventNotification
 from socioapi.models.member import Member
 from django.db.models import Count
 from rest_framework.decorators import action
+from django.db.models import Q
 
 class CommunityView(ViewSet):
-    # @action(methods=["get"], detail=None)
-    # def notifications(self,request,pk):
-    #     member = Member.objects.get(user=request.auth.user)
-    #     commmember = CommunityMember.objects.all(member=member)
-    #     last_login = request.query_params.get('lastlogin', None)
-    #     array = []
-        
-    #     if last_login is not None:
-    #         for acommunity in commmember:
-    #             events = CommunityEvent.objects.all(community=acommunity.community)
-    #             announcements = Announcement.objects.all(community=acommunity.community)
-                
-    #             for event in events: 
-    #                 enotify = EventNotification.objects.all(event=event, timestamp__gte=last_login, read="False")
-    #                 array.append(enotify)
-                    
-    #             for announcement in announcements:
-    #                 anotify = AnnouncementNotification.objects.all(announcement=announcement, timestamp__gte=last_login, read='False')
-    #                 array.append(anotify)
-                
-    #     return Response({array})
     
     
     def retrieve(self,request,pk):
@@ -53,9 +29,13 @@ class CommunityView(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
         
     def list(self,request):
+        membercommunties = request.query_params.get('member', None)
         filter = request.query_params.get('search', None)
         member = Member.objects.get(user=request.auth.user)
-        community = Community.objects.annotate(member_count=Count('members', distinct=True), event_count=Count('events', distinct=True), announcement_count=Count('announcements', distinct=True))
+        community = Community.objects.annotate(member_count=Count('members', distinct=True), event_count=Count('events', distinct=True), announcement_count=Count('announcements', distinct=True)).filter(
+            Q(public=True) |
+            Q(members__member=member)
+        )
         for comm in community:
             try: 
                 object = CommunityMember.objects.get(community=comm, member=member)
@@ -63,8 +43,14 @@ class CommunityView(ViewSet):
             except CommunityMember.DoesNotExist as ex:
                 comm.joined = False
         if filter is not None:
-            community = community.filter(name__contains=filter)
-        
+            community = community.filter(
+                Q(name__contains=filter) |
+                Q(about__contains=filter) |
+                Q(tags__label__contains=filter)
+                )
+        if membercommunties is not None:
+            community = community.filter(members__member=member)
+
         serializer = CommunitySerializer(community, many=True)
         return Response(serializer.data)
     
@@ -89,7 +75,7 @@ class CommunityView(ViewSet):
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
-        fields = ("id", 'name', 'public', 'visible', 'about', 'parentportal', 'rules', 'createdby', 'image', 'timestamp', 'joined', "member_count", 'event_count', "announcement_count")
+        fields = ("id", 'name', 'public', 'visible', 'about', 'parentportal', 'rules', 'createdby', 'image', 'timestamp', 'joined', "member_count", 'event_count', "announcement_count", "members")
         depth = 1
         
 class CreateCommunitySerializer(serializers.ModelSerializer):

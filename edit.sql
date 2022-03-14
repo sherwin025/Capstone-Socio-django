@@ -1,0 +1,14 @@
+Delete from socioapi_communitymember Where id = 5;
+Delete from socioapi_communitymember Where id = 6;
+Delete from socioapi_communitymember Where id = 7;
+Delete from socioapi_communitymember Where id = 8;
+Delete from socioapi_communitymember Where id = 9;
+Delete from socioapi_communitymember Where id = 10;
+Delete from socioapi_communitymember Where id = 11;
+Delete from socioapi_communitymember Where id = 12;
+Delete from socioapi_communitymember Where id = 13;
+Delete from socioapi_communitymember Where id = 14;
+Delete from socioapi_communitymember Where id = 15;
+Delete from socioapi_communitymember Where id = 16;
+Delete from socioapi_communitymember Where id = 17;
+Delete from socioapi_communitymember Where id = 24;

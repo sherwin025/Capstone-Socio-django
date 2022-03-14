@@ -12,5 +12,3 @@ from .event import CommunityEvent
 from .member import Member
 from .messageboard import MessageBoard
 from .tags import Tag
-from .announcementnotification import AnnouncementNotification
-from .eventnotification import EventNotification

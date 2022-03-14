@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import Announcement
 from django.db.models import Count
+from django.db.models import Q
+
+from socioapi.models.member import Member
 
 class AnnouncementEventView(ViewSet):
     def retrieve(self,request,pk):
@@ -17,7 +20,11 @@ class AnnouncementEventView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
-        announcement = Announcement.objects.annotate(comment_count=Count('thecomments'))
+        member = Member.objects.get(user=request.auth.user)
+        announcement = Announcement.objects.annotate(comment_count=Count('thecomments')).filter(
+            Q(public=True) |
+            Q(community__members__member=member)
+        )
         
         if filter is not None:
             announcement = announcement.filter(name__contains=filter)

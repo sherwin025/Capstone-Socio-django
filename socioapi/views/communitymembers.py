@@ -3,6 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import CommunityMember
+from socioapi.models.member import Member
 
 class CommunityMemberView(ViewSet):
     def retrieve(self,request,pk):
@@ -14,7 +15,11 @@ class CommunityMemberView(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND) 
         
     def list(self,request):
+        filter = request.query_params.get('member', None)
+        filter2 = request.query_params.get('community', None)
         community = CommunityMember.objects.all()
+        if filter is not None:
+            community = community.filter(member=filter, community=filter2)
         serializer = CommunityMemberSerializer(community, many=True)
         return Response(serializer.data)
     

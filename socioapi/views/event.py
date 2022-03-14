@@ -5,7 +5,9 @@ from rest_framework import serializers, status
 from socioapi.models import CommunityEvent
 from rest_framework.decorators import action
 from django.db.models import Count
+from socioapi.models.communitymember import CommunityMember
 from socioapi.models.member import Member
+from django.db.models import Q
 
 class CommunityEventView(ViewSet):
     
@@ -37,8 +39,10 @@ class CommunityEventView(ViewSet):
     def list(self,request):
         filter = request.query_params.get('search', None)
         member = Member.objects.get(user=request.auth.user)
-        event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent'))
-        
+        event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent')).filter(
+            Q(public=True) |
+            Q(community__members__member=member)
+        )
         for events in event:
             events.joined = member in events.attendees.all()
         if filter is not None:
