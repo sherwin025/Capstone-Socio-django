@@ -49,7 +49,7 @@ class CommunityView(ViewSet):
                 Q(tags__label__contains=filter)
                 )
         if membercommunties is not None:
-            community = community.filter(members__member=member)
+            community = community.filter(members__member=member, members__approved=True)
 
         serializer = CommunitySerializer(community, many=True)
         return Response(serializer.data)
@@ -62,9 +62,10 @@ class CommunityView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
     def create(self,request):
+        member = Member.objects.get(user=request.auth.user)
         serializer = CreateCommunitySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(createdby=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):

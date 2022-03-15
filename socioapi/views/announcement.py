@@ -20,6 +20,7 @@ class AnnouncementEventView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
+        communitysearch = request.query_params.get('community', None)
         member = Member.objects.get(user=request.auth.user)
         announcement = Announcement.objects.annotate(comment_count=Count('thecomments')).filter(
             Q(public=True) |
@@ -28,6 +29,8 @@ class AnnouncementEventView(ViewSet):
         
         if filter is not None:
             announcement = announcement.filter(name__contains=filter)
+        if communitysearch is not None:
+            announcement = announcement.filter(community=communitysearch)
         serializer = AnnouncementSerializer(announcement, many=True)
         return Response(serializer.data)
     

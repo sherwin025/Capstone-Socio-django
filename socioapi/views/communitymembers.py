@@ -20,6 +20,8 @@ class CommunityMemberView(ViewSet):
         community = CommunityMember.objects.all()
         if filter is not None:
             community = community.filter(member=filter, community=filter2)
+        if filter2 is not None:
+            community = community.filter(community=filter2)
         serializer = CommunityMemberSerializer(community, many=True)
         return Response(serializer.data)
     
@@ -45,7 +47,7 @@ class CommunityMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityMember
         fields = "__all__"
-        depth = 1
+        depth = 2
         
 class CreateCommunityMemberSerializer(serializers.ModelSerializer):
     class Meta:

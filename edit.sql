@@ -11,4 +11,4 @@ Delete from socioapi_communitymember Where id = 14;
 Delete from socioapi_communitymember Where id = 15;
 Delete from socioapi_communitymember Where id = 16;
 Delete from socioapi_communitymember Where id = 17;
-Delete from socioapi_communitymember Where id = 24;
+Delete from socioapi_communitymember Where id = 28;

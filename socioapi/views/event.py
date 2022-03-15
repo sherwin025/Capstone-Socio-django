@@ -38,6 +38,7 @@ class CommunityEventView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
+        communitysearch = request.query_params.get('community', None)
         member = Member.objects.get(user=request.auth.user)
         event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent')).filter(
             Q(public=True) |
@@ -47,6 +48,8 @@ class CommunityEventView(ViewSet):
             events.joined = member in events.attendees.all()
         if filter is not None:
             event = event.filter(name__contains=filter)
+        if communitysearch is not None:
+            event = event.filter(community=communitysearch)
         serializer = CommunitySerializer(event, many=True)
         return Response(serializer.data)
     
