@@ -61,9 +61,10 @@ class CommunityEventView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
     def create(self,request):
+        member = Member.objects.get(user=request.auth.user)
         serializer = CreateCommunitySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(member=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):
@@ -74,7 +75,7 @@ class CommunityEventView(ViewSet):
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityEvent
-        fields = ('id', 'name', 'date', 'address', 'approved', 'public', 'details', 'isactivity', 'zipcode', 'image', 'timestamp', 'community', 'member', 'time', "joined", 'attending_count')
+        fields = ('id', 'name', 'date', 'address', 'approved', 'public', 'attendees', 'details', 'isactivity', 'zipcode', 'image', 'timestamp', 'community', 'member', 'time', "joined", 'attending_count')
         depth = 1
         
 class CreateCommunitySerializer(serializers.ModelSerializer):

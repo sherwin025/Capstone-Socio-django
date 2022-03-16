@@ -3,6 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import MessageBoard
+from socioapi.models.member import Member
 
 class MessageEventView(ViewSet):
     def retrieve(self,request,pk):
@@ -33,9 +34,10 @@ class MessageEventView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
     def create(self,request):
+        member = Member.objects.get(user=request.auth.user)
         serializer = CreateMessageBoardSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(member=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):

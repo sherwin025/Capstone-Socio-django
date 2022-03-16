@@ -42,9 +42,10 @@ class AnnouncementEventView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
     def create(self,request):
+        member = Member.objects.get(user=request.auth.user)
         serializer = CreateAnnouncementSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(member=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):
@@ -55,7 +56,7 @@ class AnnouncementEventView(ViewSet):
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
-        fields = ('title', 'details', 'approved', 'public', 'zipcode', 'comments', 'image', 'timestamp', "community", 'member', 'comment_count')
+        fields = ('id', 'title', 'details', 'approved', 'public', 'zipcode', 'comments', 'image', 'timestamp', "community", 'member', 'comment_count')
         depth = 1
         
 class CreateAnnouncementSerializer(serializers.ModelSerializer):
