@@ -17,7 +17,7 @@ class CommunityView(ViewSet):
     def retrieve(self,request,pk):
         member = Member.objects.get(user=request.auth.user)
         try:
-            community = Community.objects.annotate(member_count=Count('members', distinct=True), event_count=Count('events', distinct=True), announcement_count=Count('announcements', distinct=True)).get(pk=pk)
+            community = Community.objects.annotate(member_count=Count('members', filter=Q(members__approved=True), distinct=True), event_count=Count('events', distinct=True), announcement_count=Count('announcements', distinct=True)).get(pk=pk)
             try:
                 object = CommunityMember.objects.get(community=community, member=member)
                 community.joined = object is not None

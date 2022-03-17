@@ -18,6 +18,13 @@ class MemberView(ViewSet):
         serializer = MemberSerializer(member, many=True)
         return Response(serializer.data)
     
+    def update(self, request,pk):
+        member = Member.objects.get(pk=pk)
+        serializer = MemberSerializer(member, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+    
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member

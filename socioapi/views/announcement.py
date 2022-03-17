@@ -57,7 +57,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = ('id', 'title', 'details', 'approved', 'public', 'zipcode', 'comments', 'image', 'timestamp', "community", 'member', 'comment_count')
-        depth = 1
+        depth = 2
         
 class CreateAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:

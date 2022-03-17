@@ -76,7 +76,7 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommunityEvent
         fields = ('id', 'name', 'date', 'address', 'approved', 'public', 'attendees', 'details', 'isactivity', 'zipcode', 'image', 'timestamp', 'community', 'member', 'time', "joined", 'attending_count')
-        depth = 1
+        depth = 2
         
 class CreateCommunitySerializer(serializers.ModelSerializer):
     class Meta:
