@@ -1,3 +1,4 @@
+from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.utils import timezone
 
@@ -10,7 +11,7 @@ class Announcement(models.Model):
     public = models.BooleanField()
     zipcode = models.IntegerField()
     comments = models.BooleanField()
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="announcementimages", height_field=None, width_field=None, max_length=None, null=True)
     timestamp = models.DateTimeField(default=timezone.now)
     
     @property

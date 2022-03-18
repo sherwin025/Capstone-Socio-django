@@ -5,6 +5,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
+import uuid
+import base64
 
 from socioapi.models import Member
 
@@ -39,6 +42,13 @@ def login_user(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
+    
+    if request.data["image"] is not None:
+        format, imgstr = request.data["image"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'{request.data["username"]}-{uuid.uuid4()}.{ext}')
+    
+    
     new_user = User.objects.create_user(
         username=request.data['username'],
         password=request.data['password'],
@@ -49,13 +59,21 @@ def register_user(request):
         last_login=timezone.now()
     )
     
-    member = Member.objects.create(
-        details=request.data['details'],
-        user=new_user,
-        zipcode=request.data['zipcode'],
-        parent=request.data['parent'],
-        image=request.data['image']
-    )
+    if request.data["image"] is not None:
+        member = Member.objects.create(
+            details=request.data['details'],
+            user=new_user,
+            zipcode=request.data['zipcode'],
+            parent=request.data['parent'],
+            image=data
+        )
+    else:
+        member = Member.objects.create(
+            details=request.data['details'],
+            user=new_user,
+            zipcode=request.data['zipcode'],
+            parent=request.data['parent']
+        )
 
     token = Token.objects.create(user=member.user)
     

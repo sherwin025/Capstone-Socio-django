@@ -6,6 +6,9 @@ from rest_framework import serializers, status
 from socioapi.models import Announcement
 from django.db.models import Count
 from django.db.models import Q
+from django.core.files.base import ContentFile
+import uuid
+import base64
 
 from socioapi.models.member import Member
 
@@ -43,9 +46,18 @@ class AnnouncementEventView(ViewSet):
     
     def create(self,request):
         member = Member.objects.get(user=request.auth.user)
+        
+        if request.data["image"] is not None:
+            format, imgstr = request.data["image"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'{member.id}-{uuid.uuid4()}.{ext}')
+            
         serializer = CreateAnnouncementSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(member=member)
+        if request.data["image"] is not None:
+            serializer.save(image=data, member=member)
+        else: 
+            serializer.save(member=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):
@@ -62,4 +74,4 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 class CreateAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
-        fields = "__all__"
+        fields = ('title', 'details', 'approved', 'public', 'zipcode', 'comments',"community", 'member')

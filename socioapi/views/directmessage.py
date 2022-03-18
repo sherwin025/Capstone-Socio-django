@@ -5,6 +5,9 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import DirectMessage, Member
 from django.db.models import Q
+from django.core.files.base import ContentFile
+import uuid
+import base64
 
 class DirectMessageView(ViewSet):
     def retrieve(self,request,pk):
@@ -24,9 +27,18 @@ class DirectMessageView(ViewSet):
     
     def create(self,request):
         member = Member.objects.get(user=request.auth.user)
+        
+        if request.data["image"] is not None:
+            format, imgstr = request.data["image"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'{member.id}-{uuid.uuid4()}.{ext}')
+        
         serializer = CreateDirectMessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(member=member)
+        if request.data["image"] is not None:
+            serializer.save(image=data)
+        else: 
+            serializer.save()
         return Response(serializer.data)
     
     def destroy(self, request, pk):
@@ -43,4 +55,4 @@ class DirectMessageSerializer(serializers.ModelSerializer):
 class CreateDirectMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = DirectMessage
-        fields = "__all__"
+        fields = ("content", "read", "recipient", "sender", "title")

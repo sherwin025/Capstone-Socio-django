@@ -3,6 +3,9 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from socioapi.models import Member
+from django.core.files.base import ContentFile
+import uuid
+import base64
 
 class MemberView(ViewSet):
     def retrieve(self,request,pk):
@@ -20,13 +23,28 @@ class MemberView(ViewSet):
     
     def update(self, request,pk):
         member = Member.objects.get(pk=pk)
-        serializer = MemberSerializer(member, data=request.data)
+        
+        if request.data["image"] is not None:
+            format, imgstr = request.data["image"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'{member.id}-{uuid.uuid4()}.{ext}')
+    
+        serializer = UpdateMemberSerializer(member, data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if request.data["image"] is not None:
+            serializer.save(image=data)
+        else: 
+            serializer.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
     
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Member
         fields = "__all__"
+        depth = 1
+        
+class UpdateMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Member
+        fields = ("id", "details", "parent", "zipcode")
         depth = 1

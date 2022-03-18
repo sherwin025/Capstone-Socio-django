@@ -13,7 +13,7 @@ class CommunityEvent(models.Model):
     details = models.CharField(max_length=250)
     isactivity = models.BooleanField()
     zipcode = models.IntegerField()
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="eventimages", height_field=None, width_field=None, max_length=None, null=True)
     timestamp = models.DateTimeField(default=timezone.now)
     attendees = models.ManyToManyField("Member", through="AttendEvent", related_name="attending")
     

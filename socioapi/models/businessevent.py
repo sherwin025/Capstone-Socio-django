@@ -9,5 +9,5 @@ class BusinessEvent(models.Model):
     time = models.TimeField()
     title = models.TextField()
     address = models.CharField(max_length=1000)
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="businesseventimages", height_field=None, width_field=None, max_length=None, null=True)
     timestamp = models.DateTimeField(default=timezone.now)

@@ -6,4 +6,4 @@ class MessageBoard(models.Model):
     community = models.ForeignKey("Community", on_delete=models.CASCADE)
     member = models.ForeignKey("Member", on_delete=models.SET_NULL, null=True)
     timestamp = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="messageboardimages", height_field=None, width_field=None, max_length=None, null=True)

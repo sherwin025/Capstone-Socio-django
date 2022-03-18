@@ -7,5 +7,5 @@ class DirectMessage(models.Model):
     content = models.CharField(max_length=1500)
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=150)
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="messageimages", height_field=None, width_field=None, max_length=None, null=True)
     read = models.BooleanField()

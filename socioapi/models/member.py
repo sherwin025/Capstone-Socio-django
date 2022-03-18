@@ -6,5 +6,5 @@ class Member(models.Model):
     zipcode = models.IntegerField()
     parent = models.BooleanField()
     details = models.CharField(max_length=250)
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="memberimages", height_field=None, width_field=None, max_length=None, null=True)
     

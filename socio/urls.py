@@ -3,6 +3,8 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from socioapi.views import MemberView, TagView,register_user, login_user, DirectMessageView, AnnouncementCommentView, MessageEventView, BusinessView,  CommunityEventView, BusinessEventView, AnnouncementEventView, CommunityMemberView, CommunityView, CommunityTagView
+from django.conf.urls.static import static
+from django.conf import settings
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'members', MemberView, 'member')
@@ -23,4 +25,4 @@ urlpatterns = [
     path('login', login_user),
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,4 +6,4 @@ class AnnouncementComment(models.Model):
     announcement = models.ForeignKey("Announcement", on_delete=models.CASCADE, related_name='thecomments')
     member = models.ForeignKey("Member", on_delete=models.SET_NULL, null=True)
     timestamp = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="announcementcommentimages", height_field=None, width_field=None, max_length=None, null=True)

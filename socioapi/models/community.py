@@ -10,7 +10,7 @@ class Community(models.Model):
     createdby = models.ForeignKey("Member", on_delete=models.SET_NULL, null=True)
     rules = models.TextField()
     tags = models.ManyToManyField("Tag", through="CommunityTag", related_name="tags")
-    image = models.ImageField(blank=True)
+    image = models.ImageField( upload_to="communityimages", height_field=None, width_field=None, max_length=None, null=True)
     timestamp = models.DateTimeField(default=timezone.now)
     
     
