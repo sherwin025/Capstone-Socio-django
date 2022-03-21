@@ -6,12 +6,15 @@ from socioapi.views import MemberView, TagView,register_user, login_user, Direct
 from django.conf.urls.static import static
 from django.conf import settings
 
+from socioapi.views.businessaccouncement import BusinessAnnouncementView
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'members', MemberView, 'member')
 router.register(r'tags', TagView, 'tag')
 router.register(r'messages', DirectMessageView, 'message')
 router.register(r'business', BusinessView, 'business')
 router.register(r'businessevents', BusinessEventView, 'businessevent')
+router.register(r'businessannouncements', BusinessAnnouncementView, 'businessannouncement')
 router.register(r'communitytags', CommunityTagView, 'communitytag')
 router.register(r'community', CommunityView, 'community')
 router.register(r'communitymember', CommunityMemberView, 'communitymember')
