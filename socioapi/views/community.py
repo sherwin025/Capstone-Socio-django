@@ -10,6 +10,10 @@ from socioapi.models.member import Member
 from django.db.models import Count
 from rest_framework.decorators import action
 from django.db.models import Q
+from django.core.files.base import ContentFile
+import uuid
+import base64
+
 
 class CommunityView(ViewSet):
     
@@ -63,9 +67,18 @@ class CommunityView(ViewSet):
     
     def create(self,request):
         member = Member.objects.get(user=request.auth.user)
+        
+        if request.data["image"] is not None:
+            format, imgstr = request.data["image"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'{member.id}-{uuid.uuid4()}.{ext}')
+            
         serializer = CreateCommunitySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(createdby=member)
+        if request.data["image"] is not None:
+            serializer.save(image=data, createdby=member)
+        else: 
+            serializer.save(createdby=member)
         return Response(serializer.data)
     
     def destroy(self, request, pk):
@@ -82,4 +95,4 @@ class CommunitySerializer(serializers.ModelSerializer):
 class CreateCommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
-        fields = "__all__"
+        fields = ('id', 'name', 'public', 'visible', 'about', 'parentportal', 'rules')
