@@ -17,7 +17,7 @@ class MessageEventView(ViewSet):
     def list(self,request):
         filter = request.query_params.get('search', None)
         communitysearch = request.query_params.get('community', None)
-        message = MessageBoard.objects.all()
+        message = MessageBoard.objects.all().order_by('-timestamp')
         
         if filter is not None:
             message = message.filter(name__contains=filter)

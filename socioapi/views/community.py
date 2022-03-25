@@ -39,7 +39,7 @@ class CommunityView(ViewSet):
         community = Community.objects.annotate(member_count=Count('members', distinct=True), event_count=Count('events', distinct=True), announcement_count=Count('announcements', distinct=True)).filter(
             Q(public=True) |
             Q(members__member=member)
-        )
+        ).order_by('-timestamp')
         for comm in community:
             try: 
                 object = CommunityMember.objects.get(community=comm, member=member)

@@ -15,7 +15,7 @@ class BusinessEventView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
-        businessEvent = BusinessEvent.objects.all()
+        businessEvent = BusinessEvent.objects.all().order_by('-timestamp')
         
         if filter is not None:
             businessEvent = businessEvent.filter(name__contains=filter)

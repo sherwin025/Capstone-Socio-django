@@ -20,7 +20,7 @@ class DirectMessageView(ViewSet):
         
     def list(self,request):
         member = Member.objects.get(user=request.auth.user)
-        directMessage = DirectMessage.objects.all()
+        directMessage = DirectMessage.objects.all().order_by('-timestamp')
         directMessage = directMessage.filter(Q(recipient=member) | Q(sender=member))
         serializer = DirectMessageSerializer(directMessage, many=True)
         return Response(serializer.data)

@@ -47,7 +47,7 @@ class CommunityEventView(ViewSet):
         event = CommunityEvent.objects.annotate(attending_count=Count('attendingevent')).filter(
             Q(public=True) |
             Q(community__members__member=member)
-        )
+        ).order_by('-timestamp')
         for events in event:
             events.joined = member in events.attendees.all()
         if filter is not None:

@@ -26,7 +26,7 @@ def login_user(request):
         token = Token.objects.get(user=authenticated_user)
         data = {
             'member': member.id,
-            'admin': authenticated_user.is_staff,
+            'parent': member.parent,
             'token': token.key,
             'last_login': authenticated_user.last_login
         }
@@ -80,7 +80,7 @@ def register_user(request):
     data = {
         'token': token.key,
         'member': member.id,
-        'admin': new_user.is_staff
+        'parent': member.parent
         }
     
     return Response(data)

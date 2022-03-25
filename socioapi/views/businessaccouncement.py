@@ -15,7 +15,7 @@ class BusinessAnnouncementView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
-        businessAnnouncement = BusinessAnnouncement.objects.all()
+        businessAnnouncement = BusinessAnnouncement.objects.all().order_by('-timestamp')
         
         if filter is not None:
             businessAnnouncement = businessAnnouncement.filter(name__contains=filter)

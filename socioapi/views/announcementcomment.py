@@ -15,7 +15,7 @@ class AnnouncementCommentView(ViewSet):
         
     def list(self,request):
         filter = request.query_params.get('search', None)
-        comment = AnnouncementComment.objects.all()
+        comment = AnnouncementComment.objects.all().order_by('-timestamp')
         
         if filter is not None:
             comment = comment.filter(name__contains=filter)

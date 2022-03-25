@@ -28,7 +28,7 @@ class AnnouncementEventView(ViewSet):
         announcement = Announcement.objects.annotate(comment_count=Count('thecomments')).filter(
             Q(public=True) |
             Q(community__members__member=member)
-        )
+        ).order_by('-timestamp')
         
         if filter is not None:
             announcement = announcement.filter(name__contains=filter)
